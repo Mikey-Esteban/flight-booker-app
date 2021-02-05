@@ -4,11 +4,11 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-
+      resources :flights, only: :index
     end
   end
 
   root to: "home#index"
   # handle routing for React Router components without interfering with Rails Routes
-  get '*path', to: 'home#index', via: :all  
+  get '*path', to: 'home#index', via: :all
 end
