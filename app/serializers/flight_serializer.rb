@@ -3,7 +3,7 @@ class FlightSerializer
   attributes :duration, :start, :origin_id, :destination_id, :origin_code
 
   attribute :start do |flight|
-    flight && flight.start.strftime('%m/%d/%Y %l:%M%P')
+    flight && flight.start.strftime('%_m.%d.%Y %l:%M%P')
   end
 
   attribute :origin_code do |flight|

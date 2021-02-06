@@ -18,6 +18,7 @@ const Column = styled.div`
 
   h4 {
     color: #1d3557; /* dark blue */
+    font-weight: 400;
   }
 
   p {
@@ -26,7 +27,7 @@ const Column = styled.div`
   }
 `
 const Bold = styled.p`
-  color: #1d3557;
+  color: #1d3557; /* dark blue */
 `
 
 const Flight = (props) => {
