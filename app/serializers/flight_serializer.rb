@@ -1,6 +1,6 @@
 class FlightSerializer
   include JSONAPI::Serializer
-  attributes :duration, :start, :origin_id, :destination_id, :origin_code
+  attributes :duration, :start, :origin_id, :destination_id, :origin_code, :destination_code
 
   attribute :start do |flight|
     flight && flight.start.strftime('%_m.%d.%Y %l:%M%P')

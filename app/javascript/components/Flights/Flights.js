@@ -125,15 +125,19 @@ const Flights = () => {
   }
 
   const handleSearch = e => {
-    console.log('hiyoooooo');
     const data = {
       'from': fromLocationValue,
       'to': toLocationValue,
       'date': travelDatesValue,
       'passengers': passengersValue
     }
-    console.log(data);
-    axios.get('/api/v1/airlines', {params: data})
+
+    axios.get('/api/v1/flights', { params: data })
+      .then( resp => {
+        console.log(resp.data.data);
+        setFlights(resp.data.data)
+      })
+      .catch( resp => console.log(resp))
   }
 
   const flightsList = flights.map( item => <Flight key={item.id} attributes={item.attributes} /> )
