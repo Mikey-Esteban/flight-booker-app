@@ -10,11 +10,38 @@ const FlightsWrapper = styled.div`
   }
 `
 const SearchWrapper = styled.div`
+  width: 600px;
+  margin: 0 auto;
+`
+
+const DropdownsWrapper = styled.div`
   display: flex;
   justify-content: space-around;
 
-  max-width: 600px;
-  margin: 0 auto;
+  width: 100%;
+`
+const DropdownWrapper = styled.div`
+
+`
+const Button = styled.div`
+  margin: 10px auto;
+  padding: 10px 0;
+  width: 100px;
+
+  background: #fca311; /* orange */
+  border: 1px solid #fca311; /* orange */
+  border-radius: 4px;
+  color: white;
+
+  cursor: pointer;
+  text-align: center;
+  transition: all ease-in-out 150ms;
+
+  &:hover {
+    background: #fff; /* orange */
+    border: 1px solid #fca311; /* orange */
+    color: #fca311; /* orange */
+  }
 `
 
 const Flights = () => {
@@ -85,24 +112,35 @@ const Flights = () => {
     })
   }
 
+  const handleSearch = e => {
+    console.log('hiyoooooo');
+  }
+
   const flightsList = flights.map( item => <Flight key={item.id} attributes={item.attributes} /> )
 
   return (
     <Fragment>
       <div>[My Home Component]</div>
       <SearchWrapper>
-        <DropdownWrapper>
-          <Dropdown title='Select location' list={toLocation} toggleSelected={toggleSelected} />
-        </DropdownWrapper>
-        <DropdownWrapper>
-          <Dropdown title='Select location' list={fromLocation} toggleSelected={toggleSelected} />
-        </DropdownWrapper>
-        <DropdownWrapper>
-          <Dropdown title='Select date' list={travelDates} toggleSelected={toggleSelected} />
-        </DropdownWrapper>
-        <DropdownWrapper>
-          <Dropdown title='Select passenger' list={passengers} toggleSelected={toggleSelected} />
-        </DropdownWrapper>
+        <DropdownsWrapper>
+          <DropdownWrapper>
+            <div className="label">Departing: </div>
+            <Dropdown title='Select location' list={fromLocation} toggleSelected={toggleSelected} />
+          </DropdownWrapper>
+          <DropdownWrapper>
+            <div className="label">Arriving: </div>
+            <Dropdown title='Select location' list={toLocation} toggleSelected={toggleSelected} />
+          </DropdownWrapper>
+          <DropdownWrapper>
+            <div className="label">Date: </div>
+            <Dropdown title='Select date' list={travelDates} toggleSelected={toggleSelected} />
+          </DropdownWrapper>
+          <DropdownWrapper>
+            <div className="label">Tickets: </div>
+            <Dropdown title='Select passengers' list={passengers} toggleSelected={toggleSelected} />
+          </DropdownWrapper>
+        </DropdownsWrapper>
+        <Button onClick={handleSearch}>Search</Button>
       </SearchWrapper>
       <FlightsWrapper>
         {flightsList}

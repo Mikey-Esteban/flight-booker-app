@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAngleUp, faAngleDown, faCheck } from '@fortawesome/free-solid-svg-icons'
 
 const DropdownWrapper = styled.div`
-  width: 200px;
+  width: 150px;
 `
 
 const Button = styled.div`
@@ -16,7 +16,13 @@ const Button = styled.div`
   border: 1px solid #efefef;
   width: 100%;
 
+  cursor: pointer;
   font-family: 'Roboto Mono', monospace;
+  font-size: 14px;
+
+  &:hover {
+    background: #efefef;
+  }
 `
 
 const TitleWrapper = styled.div`
