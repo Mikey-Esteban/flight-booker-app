@@ -47,10 +47,16 @@ const Button = styled.div`
 const Flights = () => {
 
   const [ flights, setFlights ] = useState([])
+  // dropdown value options
   const [ fromLocation, setFromLocation ] = useState([])
   const [ toLocation, setToLocation ] = useState([])
   const [ travelDates, setTravelDates ] = useState([])
   const [ passengers, setPassengers ] = useState([])
+  // selected values
+  const [ fromLocationValue, setFromLocationValue ] = useState()
+  const [ toLocationValue, setToLocationValue ] = useState()
+  const [ travelDatesValue, setTravelDatesValue ] = useState()
+  const [ passengersValue, setPassengersValue ] = useState()
 
   useEffect( () => {
     // set Passengers dropdown data
@@ -101,19 +107,33 @@ const Flights = () => {
 
   const toggleSelected = (id, key) => {
     const legend = {
-      'toLocation': toLocation,
-      'fromLocation': fromLocation,
-      'passengers': passengers,
-      'travelDates': travelDates
+      'fromLocation': [fromLocation, setFromLocationValue],
+      'toLocation': [toLocation, setToLocationValue],
+      'passengers': [passengers, setPassengersValue],
+      'travelDates': [travelDates, setTravelDatesValue]
     }
 
-    legend[key].forEach( item => {
-      item.id === id ? item.selected = true : item.selected = false ;
+    legend[key][0].forEach( item => {
+      if (item.id === id) {
+        item.selected = true
+        // update selected value
+        legend[key][1](item.title)
+      } else {
+        item.selected = false
+      }
     })
   }
 
   const handleSearch = e => {
     console.log('hiyoooooo');
+    const data = {
+      'from': fromLocationValue,
+      'to': toLocationValue,
+      'date': travelDatesValue,
+      'passengers': passengersValue
+    }
+    console.log(data);
+    axios.get('/api/v1/airlines', {params: data})
   }
 
   const flightsList = flights.map( item => <Flight key={item.id} attributes={item.attributes} /> )
