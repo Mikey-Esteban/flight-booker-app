@@ -26,7 +26,7 @@ const DropdownWrapper = styled.div`
 
 const ButtonsWrapper = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
 `
 
 const Button = styled.div`
@@ -35,8 +35,8 @@ const Button = styled.div`
   justify-content: center;
 
   margin: 10px auto;
-  padding: 10px 0;
-  width: 100px;
+  padding: 10px 20px;
+  ${'' /* width: 80px; */}
 
   background: #fca311; /* orange */
   border: 1px solid #fca311; /* orange */
@@ -44,6 +44,8 @@ const Button = styled.div`
   color: white;
 
   cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
   text-align: center;
   transition: all ease-in-out 150ms;
 
@@ -66,11 +68,24 @@ const BlueOutlineButton = styled(Button)`
   }
 `
 
+const RedOutlineButton = styled(Button)`
+  background: #fff;
+  border: 1px solid #d62828; /* red */
+  color: #d62828;
+
+  &:hover {
+    background: #d62828; /* red */
+    border: 1px solid #d62828; /* red */
+    color: #fff;
+  }
+`
+
 const Flights = () => {
 
   const [ flights, setFlights ] = useState([])
   const [ allFlights, setAllFlights ] = useState([])
   const [ selectedFlights, setSelectedFlights ] = useState([])
+  const [ viewCheckout, setViewCheckout ] = useState(false)
   // dropdown value options
   const [ fromLocation, setFromLocation ] = useState([])
   const [ toLocation, setToLocation ] = useState([])
@@ -177,11 +192,17 @@ const Flights = () => {
       // remove flight from selected flights
       const updatedFlights = selectedFlights.filter( item => item.id !== flight.id)
       setSelectedFlights(updatedFlights)
+      if (updatedFlights.length === 0) {
+        setViewCheckout(false)
+      }
     } else {
       input.checked = true
       setSelectedFlights([...selectedFlights, flight])
+      setViewCheckout(true)
       console.log(selectedFlights);
     }
+
+    // selectedFlights.length > 0 ? setViewCheckout(true) : setViewCheckout(false) ;
   }
 
   const flightsList = flights.map( item => {
@@ -213,6 +234,9 @@ const Flights = () => {
         <ButtonsWrapper>
           <Button onClick={handleSearch}>Search</Button>
           <BlueOutlineButton onClick={handleReset}>All Flights</BlueOutlineButton>
+          { viewCheckout &&
+            <RedOutlineButton onClick={handleSearch}>Checkout</RedOutlineButton>
+          }
         </ButtonsWrapper>
       </SearchWrapper>
       <FlightsWrapper>
