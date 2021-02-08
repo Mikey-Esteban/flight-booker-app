@@ -1,6 +1,7 @@
 import React, { useState, useEffect, Fragment } from 'react'
 import axios from 'axios'
 import styled from 'styled-components'
+import { Redirect }  from 'react-router'
 import Flight from './Flight'
 import Dropdown from './Dropdown'
 
@@ -86,25 +87,26 @@ const Flights = () => {
   const [ allFlights, setAllFlights ] = useState([])
   const [ selectedFlights, setSelectedFlights ] = useState([])
   const [ viewCheckout, setViewCheckout ] = useState(false)
+  const [ redirect, setRedirect ] = useState(false)
   // dropdown value options
   const [ fromLocation, setFromLocation ] = useState([])
   const [ toLocation, setToLocation ] = useState([])
   const [ travelDates, setTravelDates ] = useState([])
-  const [ passengers, setPassengers ] = useState([])
+  const [ tickets, setTickets ] = useState([])
   // selected values
   const [ fromLocationValue, setFromLocationValue ] = useState()
   const [ toLocationValue, setToLocationValue ] = useState()
   const [ travelDatesValue, setTravelDatesValue ] = useState()
-  const [ passengersValue, setPassengersValue ] = useState()
+  const [ ticketsValue, setTicketsValue ] = useState()
 
   useEffect( () => {
-    // set Passengers dropdown data
-    const passengers = []
+    // set Tickets dropdown data
+    const tickets = []
     for (let i = 1; i < 5; i++) {
-      const data = { id: i, title: i, selected: false, key: 'passengers' }
-      passengers.push(data)
+      const data = { id: i, title: i, selected: false, key: 'tickets' }
+      tickets.push(data)
     }
-    setPassengers(passengers)
+    setTickets(tickets)
 
     axios.get('/api/v1/flights')
       .then( resp => {
@@ -149,7 +151,7 @@ const Flights = () => {
     const legend = {
       'fromLocation': [fromLocation, setFromLocationValue],
       'toLocation': [toLocation, setToLocationValue],
-      'passengers': [passengers, setPassengersValue],
+      'tickets': [tickets, setTicketsValue],
       'travelDates': [travelDates, setTravelDatesValue]
     }
 
@@ -169,7 +171,6 @@ const Flights = () => {
       'from': fromLocationValue,
       'to': toLocationValue,
       'date': travelDatesValue,
-      'passengers': passengersValue
     }
 
     axios.get('/api/v1/flights', { params: data })
@@ -185,7 +186,6 @@ const Flights = () => {
   }
 
   const handleSelect = (flight) => {
-    console.log(flight)
     const input = event.target.previousSibling
     if (input.checked === true) {
       input.checked = false
@@ -199,15 +199,28 @@ const Flights = () => {
       input.checked = true
       setSelectedFlights([...selectedFlights, flight])
       setViewCheckout(true)
-      console.log(selectedFlights);
     }
+  }
 
-    // selectedFlights.length > 0 ? setViewCheckout(true) : setViewCheckout(false) ;
+  const handleCheckout = () => {
+    setRedirect(true)
   }
 
   const flightsList = flights.map( item => {
     return (<Flight key={item.id} flight={item} id={item.id} attributes={item.attributes} handleSelect={handleSelect} />)
   })
+
+  if (redirect) {
+    return (
+      <Redirect to={{
+        pathname: '/checkout',
+        state: {
+          flights: selectedFlights,
+          tickets: ticketsValue
+        }
+      }} />
+    )
+  }
 
   return (
     <Fragment>
@@ -228,14 +241,14 @@ const Flights = () => {
           </DropdownWrapper>
           <DropdownWrapper>
             <div className="label">Tickets: </div>
-            <Dropdown title='Select passengers' list={passengers} toggleSelected={toggleSelected} />
+            <Dropdown title='Select tickets' list={tickets} toggleSelected={toggleSelected} />
           </DropdownWrapper>
         </DropdownsWrapper>
         <ButtonsWrapper>
           <Button onClick={handleSearch}>Search</Button>
           <BlueOutlineButton onClick={handleReset}>All Flights</BlueOutlineButton>
           { viewCheckout &&
-            <RedOutlineButton onClick={handleSearch}>Checkout</RedOutlineButton>
+            <RedOutlineButton onClick={handleCheckout}>Checkout</RedOutlineButton>
           }
         </ButtonsWrapper>
       </SearchWrapper>
