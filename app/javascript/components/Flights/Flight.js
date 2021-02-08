@@ -76,13 +76,6 @@ const Bold = styled.p`
 
 const Flight = (props) => {
 
-  const handleClick = e => {
-    const input = e.target.previousSibling
-    input.checked === true ? input.checked = false : input.checked = true
-    // const input = wrapper.querySelector('input')
-    // input.checked = true
-  }
-
   return (
     <Row className="row">
       <Column>
@@ -98,7 +91,7 @@ const Flight = (props) => {
         <p>{props.attributes.duration}m</p>
       </Column>
       <Column>
-        <CheckBoxWrapper id={props.id} onClick={handleClick}>
+        <CheckBoxWrapper id={props.id} onClick={props.handleSelect}>
           <CheckBox type="checkbox" />
           <CheckBoxLabel htmlFor="checkbox" />
         </CheckBoxWrapper>

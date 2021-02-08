@@ -168,7 +168,14 @@ const Flights = () => {
     setFlights(allFlights)
   }
 
-  const flightsList = flights.map( item => <Flight key={item.id} id={item.id} attributes={item.attributes} /> )
+  const handleSelect = e => {
+    const input = e.target.previousSibling
+    input.checked === true ? input.checked = false : input.checked = true
+  }
+
+  const flightsList = flights.map( item => {
+    return (<Flight key={item.id} id={item.id} attributes={item.attributes} handleSelect={handleSelect} />)
+  })
 
   return (
     <Fragment>
