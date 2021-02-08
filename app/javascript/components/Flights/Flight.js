@@ -91,7 +91,7 @@ const Flight = (props) => {
         <p>{props.attributes.duration}m</p>
       </Column>
       <Column>
-        <CheckBoxWrapper id={props.id} onClick={props.handleSelect}>
+        <CheckBoxWrapper id={props.id} onClick={(event) => props.handleSelect(props.flight) }>
           <CheckBox type="checkbox" />
           <CheckBoxLabel htmlFor="checkbox" />
         </CheckBoxWrapper>

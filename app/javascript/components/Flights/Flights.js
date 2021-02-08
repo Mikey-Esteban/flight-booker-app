@@ -70,6 +70,7 @@ const Flights = () => {
 
   const [ flights, setFlights ] = useState([])
   const [ allFlights, setAllFlights ] = useState([])
+  const [ selectedFlights, setSelectedFlights ] = useState([])
   // dropdown value options
   const [ fromLocation, setFromLocation ] = useState([])
   const [ toLocation, setToLocation ] = useState([])
@@ -168,13 +169,23 @@ const Flights = () => {
     setFlights(allFlights)
   }
 
-  const handleSelect = e => {
-    const input = e.target.previousSibling
-    input.checked === true ? input.checked = false : input.checked = true
+  const handleSelect = (flight) => {
+    console.log(flight)
+    const input = event.target.previousSibling
+    if (input.checked === true) {
+      input.checked = false
+      // remove flight from selected flights
+      const updatedFlights = selectedFlights.filter( item => item.id !== flight.id)
+      setSelectedFlights(updatedFlights)
+    } else {
+      input.checked = true
+      setSelectedFlights([...selectedFlights, flight])
+      console.log(selectedFlights);
+    }
   }
 
   const flightsList = flights.map( item => {
-    return (<Flight key={item.id} id={item.id} attributes={item.attributes} handleSelect={handleSelect} />)
+    return (<Flight key={item.id} flight={item} id={item.id} attributes={item.attributes} handleSelect={handleSelect} />)
   })
 
   return (
