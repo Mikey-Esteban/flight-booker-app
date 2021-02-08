@@ -168,7 +168,7 @@ const Flights = () => {
     setFlights(allFlights)
   }
 
-  const flightsList = flights.map( item => <Flight key={item.id} attributes={item.attributes} /> )
+  const flightsList = flights.map( item => <Flight key={item.id} id={item.id} attributes={item.attributes} /> )
 
   return (
     <Fragment>
