@@ -23,7 +23,17 @@ const DropdownsWrapper = styled.div`
 const DropdownWrapper = styled.div`
 
 `
+
+const ButtonsWrapper = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+`
+
 const Button = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   margin: 10px auto;
   padding: 10px 0;
   width: 100px;
@@ -44,9 +54,22 @@ const Button = styled.div`
   }
 `
 
+const BlueOutlineButton = styled(Button)`
+  background: #fff;
+  border: 1px solid #003049; /* dark blue */
+  color: #003049;
+
+  &:hover {
+    background: #003049; /* dark blue */
+    border: 1px solid #003049; /* dark blue */
+    color: #fff;
+  }
+`
+
 const Flights = () => {
 
   const [ flights, setFlights ] = useState([])
+  const [ allFlights, setAllFlights ] = useState([])
   // dropdown value options
   const [ fromLocation, setFromLocation ] = useState([])
   const [ toLocation, setToLocation ] = useState([])
@@ -70,6 +93,7 @@ const Flights = () => {
     axios.get('/api/v1/flights')
       .then( resp => {
         setFlights(resp.data.data)
+        setAllFlights(resp.data.data)
         // set Dates dropdown data
         const datesArr = resp.data.data.map( item => item.attributes.start.split(' ')[1] )
         const uniqueDates = [...new Set(datesArr)]
@@ -124,7 +148,7 @@ const Flights = () => {
     })
   }
 
-  const handleSearch = e => {
+  const handleSearch = () => {
     const data = {
       'from': fromLocationValue,
       'to': toLocationValue,
@@ -138,6 +162,10 @@ const Flights = () => {
         setFlights(resp.data.data)
       })
       .catch( resp => console.log(resp))
+  }
+
+  const handleReset = () => {
+    setFlights(allFlights)
   }
 
   const flightsList = flights.map( item => <Flight key={item.id} attributes={item.attributes} /> )
@@ -164,7 +192,10 @@ const Flights = () => {
             <Dropdown title='Select passengers' list={passengers} toggleSelected={toggleSelected} />
           </DropdownWrapper>
         </DropdownsWrapper>
-        <Button onClick={handleSearch}>Search</Button>
+        <ButtonsWrapper>
+          <Button onClick={handleSearch}>Search</Button>
+          <BlueOutlineButton onClick={handleReset}>All Flights</BlueOutlineButton>
+        </ButtonsWrapper>
       </SearchWrapper>
       <FlightsWrapper>
         {flightsList}
