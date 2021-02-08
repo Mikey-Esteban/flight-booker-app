@@ -38,7 +38,7 @@ airports = Airport.create([
 
 flights = []
 
-30.times do
+100.times do
   origin_id, destination_id = generate_origin_and_destination_flight_ids
   flight = Flight.create({
     start: generate_start,
