@@ -1,7 +1,7 @@
 import React from 'react'
 import { Route, Switch } from 'react-router-dom'
 import Flights from './Flights/Flights'
-import Checkout from './Flights/Checkout'
+import Checkout from './Checkout/Checkout'
 
 const App = () => {
   return (
