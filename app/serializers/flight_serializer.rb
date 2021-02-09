@@ -16,4 +16,6 @@ class FlightSerializer
     data[flight.destination_id]
   end
 
+  has_many :bookings
+
 end
