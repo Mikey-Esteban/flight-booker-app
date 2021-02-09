@@ -1,7 +1,30 @@
 import React, { useState, Fragment } from 'react'
 import axios from 'axios'
-
+import styled from 'styled-components'
 import Passenger from './Passenger'
+
+const Button = styled.div`
+  margin: 10px auto;
+  padding: 10px 20px;
+  width: 100px;
+
+  background: #fca311; /* orange */
+  border: 1px solid #fca311; /* orange */
+  border-radius: 4px;
+  color: white;
+
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  transition: all ease-in-out 150ms;
+
+  &:hover {
+    background: #fff; /* orange */
+    border: 1px solid #fca311; /* orange */
+    color: #fca311; /* orange */
+  }
+`
 
 const Checkout = (props) => {
 
@@ -42,7 +65,7 @@ const Checkout = (props) => {
       </div>
       <form onSubmit={handleSubmit} >
         {passengersList}
-        <input type="submit" value="book flight!"/>
+        <Button onClick={handleSubmit}>Book Flight</Button>
       </form>
     </Fragment>
   )
