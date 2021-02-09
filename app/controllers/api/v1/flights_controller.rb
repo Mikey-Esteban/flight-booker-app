@@ -19,7 +19,7 @@ class Api::V1::FlightsController < ApplicationController
       flights = flights.where("DATE(start) = ?", formatted_date)
     end
 
-    render json: FlightSerializer.new(flights).serializable_hash.to_json
+    render json: FlightSerializer.new(flights, options).serializable_hash.to_json
   end
 
 
@@ -34,6 +34,10 @@ class Api::V1::FlightsController < ApplicationController
     date_array = date.split('.')
     formatted_date = "#{date_array[2]}-#{date_array[0]}-#{date_array[1]}"
     formatted_date
+  end
+
+  def options
+    @options ||= { include: %i[bookings] }
   end
 
 end

@@ -4,13 +4,13 @@ class Api::V1::BookingsController < ApplicationController
   def index
     bookings = Booking.all
 
-    render json: BookingSerializer(bookings).serializable_hash.to_json
+    render json: BookingSerializer.new(bookings, options).serializable_hash.to_json
   end
 
   def show
     booking = Booking.find_by(id: params[:id])
 
-    render json: BookingSerializer(booking).serializable_hash.to_json
+    render json: BookingSerializer.new(booking, options).serializable_hash.to_json
   end
 
   def create
@@ -23,7 +23,7 @@ class Api::V1::BookingsController < ApplicationController
         passenger = Passenger.create(name: p['name'], email: p['email'], flight_id: flight.id, booking_id: booking.id)
       end
 
-      render json: BookingSerializer(booking).serializable_hash.to_json
+      render json: BookingSerializer.new(booking, options).serializable_hash.to_json
     else
       render json: { error: booking.errors.messages }, status: 422
     end
@@ -33,7 +33,11 @@ class Api::V1::BookingsController < ApplicationController
   private
 
   def booking_params
-    params.require(:booking).permit(:flight_id)
+    params.require(:booking).permit(:flight_id, :passengers)
+  end
+
+  def options
+    @options ||= { include: %i[passengers]}
   end
 
 end
