@@ -1,15 +1,58 @@
-import React, { useState, Fragment } from 'react'
+import React, { useState } from 'react'
 import axios from 'axios'
+import { Redirect } from 'react-router'
 import styled from 'styled-components'
 import Passenger from './Passenger'
+
+const Wrapper = styled.div`
+  max-width: 800px;
+  margin: 0 auto;
+`
+const FlightDetails = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  height: 200px;
+
+  background: #003049; /* dark blue */
+  border-radius: 10px;
+  color: #fff;
+  font-size: 20px;
+
+  h2 {
+    font-weight: 200;
+    margin-bottom: 10px;
+  }
+  h3 {
+    margin-top: 10px;
+    margin-bottom: 5px;
+  }
+  h4 {
+    margin-top: 0;
+    margin-bottom: 5px;
+  }
+`
+
+const FormWrapper = styled.div`
+  max-width: 700px;
+  margin: 0 auto;
+`
+
+const PassengersWrapper = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 30px;
+`
 
 const Button = styled.div`
   margin: 10px auto;
   padding: 10px 20px;
   width: 100px;
 
-  background: #fca311; /* orange */
-  border: 1px solid #fca311; /* orange */
+  background: #d62828; /* red */
+  border: 1px solid #d62828; /* red */
   border-radius: 4px;
   color: white;
 
@@ -20,9 +63,9 @@ const Button = styled.div`
   transition: all ease-in-out 150ms;
 
   &:hover {
-    background: #fff; /* orange */
-    border: 1px solid #fca311; /* orange */
-    color: #fca311; /* orange */
+    background: #fff;
+    border: 1px solid #d62828; /* red */
+    color: #d62828; /* red */
   }
 `
 
@@ -32,19 +75,24 @@ const Checkout = (props) => {
   const numTickets = props.location.state.tickets
   const flight = flights[0]
   const passengers = []
+  const [ redirect, setRedirect ] = useState(false)
+  const [ booking, setBooking ] = useState({})
+  const [ bookingPassengers, setBookingPassengers ] = useState([])
 
   const handleSubmit = e => {
     e.preventDefault()
     console.log(passengers);
 
-    const booking = {
+    const bookingData = {
       flight_id: flight.id,
       passengers: passengers
     }
 
-    axios.post('/api/v1/bookings', {booking})
+    axios.post('/api/v1/bookings', {booking: bookingData})
       .then( resp => {
-        debugger
+        setBooking(resp.data.data)
+        setBookingPassengers(resp.data.included)
+        setRedirect(true)
       })
       .catch( resp => console.log(resp))
   }
@@ -55,19 +103,39 @@ const Checkout = (props) => {
     passengersList.push(<Passenger passengers={passengers} id={i} key={i} />)
   }
 
+  if (redirect) {
+    return (
+      <Redirect to={{
+          pathname: `/bookings/${booking.id}`,
+          state: {
+            booking: booking,
+            passengers: bookingPassengers,
+            flight: flight
+          }
+        }}
+      />
+    )
+  }
+
   return (
-    <Fragment>
+    <Wrapper>
       <div>[Checkout component, look up props in console]</div>
-      <div className="flight-details">
-        Flight Details
-        <h3>{flight.attributes.origin_code} to {flight.attributes.destination_code}</h3>
+      <FlightDetails>
+        <h2>Flight Details</h2>
+        <h3>
+          {flight.attributes.origin_code} to {flight.attributes.destination_code}
+        </h3>
         <h4>on {flight.attributes.start}</h4>
-      </div>
-      <form onSubmit={handleSubmit} >
-        {passengersList}
-        <Button onClick={handleSubmit}>Book Flight</Button>
-      </form>
-    </Fragment>
+      </FlightDetails>
+      <FormWrapper>
+        <form onSubmit={handleSubmit} >
+          <PassengersWrapper>
+            {passengersList}
+          </PassengersWrapper>
+          <Button onClick={handleSubmit}>Book Flight</Button>
+        </form>
+      </FormWrapper>
+    </Wrapper>
   )
 }
 

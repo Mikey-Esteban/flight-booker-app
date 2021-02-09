@@ -3,7 +3,11 @@ import styled from 'styled-components'
 
 const Wrapper = styled.div`
   margin: 25px auto;
-  width: 200px;
+  width: 300px;
+
+  h4 {
+    font-weight: 400;
+  }
 `
 
 const Field = styled.div`
@@ -11,6 +15,15 @@ const Field = styled.div`
 
   label, input {
     width: 100%;
+  }
+
+  input {
+    border: 1px solid #e5e5e5;
+    border-radius: 4px;
+    padding: 5px 0 5px 10px;
+
+    font-family: 'Roboto Mono', monospace;
+    font-size: 16px;
   }
 `
 
@@ -20,6 +33,7 @@ const Passenger = (props) => {
 
   const handleChange = (e) => {
     setPassenger({...passenger, [e.target.name]:e.target.value})
+    console.log(passenger);
     passengers[id] = passenger
   }
 
